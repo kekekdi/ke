@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>WebCat</title>
+    <style>
+body{
+padding:0;
+margin:0;
+}
+#a{
+position:fixed;
+top:340px;
+left:160px;
+}
+#b{
+position:fixed;
+top:340px;
+left:270px;
+}
+#c{
+position:fixed;
+top:370px;
+left:30px;
+color:#33FFCC;
+}
+#sitetime{
+  position:fixed;
+top:490px;
+left:55px;
+  }
+#bb{
+position:fixed;
+top:30px;
+left:280px;
+}
+#cc{
+position:fixed;
+top:325px;
+left:68px;
+color:red;
+}
+#hz2{
+position:fixed;
+top:323px;
+left:63px;
+width:260px;
+height:110px;
+border: px black solid;
+}
+#hz1{
+position:fixed;
+top:312px;
+left:53px;
+width:280px;
+height:130px;
+border:1px black solid;
+}
+#az{
+position:fixed;
+top:160px;
+left:15px;
+width:260px;
+height:110px;
+background-color: #fff;
+border: 1px black solid;
+width:60px;
+height:20px;
+background-color: #3f7fe0;
+text-align:center;
+border-radius: 15px;
+transition:all 2s;
+overflow: hidden;
+}
+#az:hover{
+background-color:#33FFCC;
+width:360px;
+height:110px;
+transition:all 2s;
+}
+#bs{
+position:fixed;
+top:703px;
+left:110px;
+color: #99FFFF;
+}
+</style>
+  </head>
+  <body>
+  <img src="../图片/1.png" width="393px" height="783px"/>
+  <div id="hz1">
+ 
+ 
+ 
+  
+      <p id="cc">输入年龄&nbsp;&nbsp;:</p>
+ <div id="hz2">
+   <textarea rows="1" cols="15" id="a" placeholder="输入年龄"></textarea>
+   <button id="b">查询</button>
+   <ul id="c"></ul>
+  </div>
+</div>
+	<span id="sitetime"  style="color: #000;" ></span>
+    <div id="az">关于</br>&nbsp;&nbsp;&nbsp;&nbsp;你好！我是keke，这个小小年龄测试算是个开胃菜吧！。！本项目或许将命名为"浮生若梦"</br></br>联系我们&nbsp;&nbsp;:<i>2661972761<i></div>
+    <audio  autoplay="autoplay" loop="loop"  preload="auto" src="./音乐/背景.mp3"></audio>
+    <p id="bs">浮生若梦----伴生项目</p>
+ 
+   <script>
+   var btn = document.querySelector("button");
+   var txt = document.querySelector("textarea");
+   var uu = document.querySelector("ul");
+
+   btn.onclick=function (){
+ 
+   uu.innerHTML= ("查询成功:<br>你今年的年龄是"+txt.value+"岁----浮生若梦");
+
+}
+
+      function siteTime(){
+        window.setTimeout("siteTime()", 1000);
+        var seconds = 1000;
+        var minutes = seconds * 60;
+        var hours = minutes * 60;
+        var days = hours * 24;
+        var years = days * 365;
+        var today = new Date();
+        var todayYear = today.getFullYear();
+        var todayMonth = today.getMonth()+1;
+        var todayDate = today.getDate();
+        var todayHour = today.getHours();
+        var todayMinute = today.getMinutes();
+        var todaySecond = today.getSeconds();
+        /* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
+        year - 作为date对象的年份，为4位年份值
+        month - 0-11之间的整数，做为date对象的月份
+        day - 1-31之间的整数，做为date对象的天数
+        hours - 0(午夜24点)-23之间的整数，做为date对象的小时数
+        minutes - 0-59之间的整数，做为date对象的分钟数
+        seconds - 0-59之间的整数，做为date对象的秒数
+        microseconds - 0-999之间的整数，做为date对象的毫秒数 */
+        var t1 = Date.UTC(2022,10,09,23,59,59); //北京时间2017-09-16 00:00:00创建网站的时间
+        var t2 = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+        var diff = t2-t1;
+        var diffYears = Math.floor(diff/years);
+        var diffDays = Math.floor((diff/days)-diffYears*365);
+        var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+        var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+        var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+        document.getElementById("sitetime").innerHTML="年龄查询--已运行:"+diffDays+"天"+diffHours+"时"+diffMinutes+"分钟"+diffSeconds+"秒";
+    }
+    siteTime();
+</script>
+  </body>
+</html>

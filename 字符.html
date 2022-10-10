@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+      /* font-size: 0; */
+    }
+
+    canvas,
+    video {
+      width: 100%;
+      height: 100%;
+    }
+#A{
+position:fixed;
+top:720px;
+left:300px;
+}
+#sitetime{
+position:fixed;
+top:760px;
+left:20px;
+}
+#bs{
+position:fixed;
+top:2px;
+left:210px;
+color:#99FFCC;
+}
+  </style>
+</head>
+
+<body>
+  <input type="file" id="file" name="file" accept=".mp4,.flv">
+  <input type="button" onclick="javascript:location.reload();" value="刷新当前页面" id="A">
+  	<span id="sitetime"  style="color: #33FFCC;" ></span>
+    <p id="bs">浮生若梦-----伴生项目</p>
+</body>
+<script src="字符.js"></script>
+<script>
+  let fontSize = 9
+  let $file = document.getElementById('file')
+  $file.onchange = function () {
+    let file = $file.files.item(0)
+    // let reader = new FileReader()
+    // reader.readAsDataURL(file, 'UTF-8')
+    // reader.onprogress = function (evt) {
+    //   console.log(`${(evt.loaded / evt.total * 100).toFixed()}%`)
+    // }
+    // reader.onload = function (evt) {
+      document.body.removeChild($file)
+      // evt.target.result
+      play(URL.createObjectURL(file), file.name.split('.').pop())
+    // }
+  }
+
+  function play(url, type) {
+    if (flvjs.isSupported()) {
+      let videoElement = document.createElement('video')
+      videoElement.loop = true
+      let flvPlayer = flvjs.createPlayer({
+        type: type,
+        url: url
+      })
+      flvPlayer.attachMediaElement(videoElement)
+      flvPlayer.load()
+      flvPlayer.volume = 0.1
+      flvPlayer.play()
+      // document.body.appendChild(videoElement)
+
+      flvPlayer.on('media_info', function (mediaInfo) {
+        // 设置canvas
+        let canvasElement = document.createElement('canvas')
+        // 不明原因的卡
+        // canvasElement.onmousewheel = () => { }
+        let fps = mediaInfo.fps
+        let canvasWidth = mediaInfo.width
+        let canvasHeight = mediaInfo.height
+        let textInfo
+        let chars = "MMWNKEGD0OLkxdolc;:,'... "
+        let fontWidth
+
+        canvasElement.width = canvasWidth
+        canvasElement.height = canvasHeight
+        ctx = canvasElement.getContext('2d')
+        ctx.font = `${fontSize}px courier new`
+        ctx.fillStyle = 'black'
+        ctx.textBaseline = 'middle'
+        fontWidth = ctx.measureText('A').width
+        textInfo = {
+          col: ~~Math.ceil(canvasWidth / fontWidth),
+          row: canvasHeight / fontSize
+        }
+
+        document.body.appendChild(canvasElement)
+
+        draw()
+
+        function draw() {
+          ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+          ctx.drawImage(videoElement, 0, 0, textInfo.col, textInfo.row)
+          let strings = getStringData(ctx, textInfo.col, textInfo.row)
+          ctx.clearRect(0, 0, textInfo.col, textInfo.row)
+          for (let i = 0, len = strings.length; i < len; i++) {
+            ctx.fillText(strings[i], 0, fontSize * (i + 0.5), canvasWidth, fontSize)
+          }
+          requestAnimationFrame(draw)
+        }
+
+        function getStringData(ctx, width, height) {
+          let length = textInfo.row * textInfo.col
+          let strings = []
+          // 获取一个 fontSize * fontSize 色块的颜色
+          let imageData = ctx.getImageData(0, 0, width, height)
+          for (let i = 0; i < length * 4; i += 4) {
+            let myRed = imageData.data[i]
+            let myGreen = imageData.data[i + 1]
+            let myBlue = imageData.data[i + 2]
+            let myGray = parseInt((myRed + myGreen + myBlue) / 3)
+            let char = chars[~~(myGray / 255 * chars.length)]
+            let index = ~~(i / 4 / width)
+            if (strings[index]) {
+              strings[index].push(char)
+            } else {
+              strings[index] = []
+              strings[index].push(char)
+            }
+          }
+          return strings
+        }
+      })
+    }
+  }
+   function siteTime(){
+        window.setTimeout("siteTime()", 1000);
+        var seconds = 1000;
+        var minutes = seconds * 60;
+        var hours = minutes * 60;
+        var days = hours * 24;
+        var years = days * 365;
+        var today = new Date();
+        var todayYear = today.getFullYear();
+        var todayMonth = today.getMonth()+1;
+        var todayDate = today.getDate();
+        var todayHour = today.getHours();
+        var todayMinute = today.getMinutes();
+        var todaySecond = today.getSeconds();
+        /* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
+        year - 作为date对象的年份，为4位年份值
+        month - 0-11之间的整数，做为date对象的月份
+        day - 1-31之间的整数，做为date对象的天数
+        hours - 0(午夜24点)-23之间的整数，做为date对象的小时数
+        minutes - 0-59之间的整数，做为date对象的分钟数
+        seconds - 0-59之间的整数，做为date对象的秒数
+        microseconds - 0-999之间的整数，做为date对象的毫秒数 */
+        var t1 = Date.UTC(2022,10,09,23,59,59); //北京时间2017-09-16 00:00:00创建网站的时间
+        var t2 = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+        var diff = t2-t1;
+        var diffYears = Math.floor(diff/years);
+        var diffDays = Math.floor((diff/days)-diffYears*365);
+        var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+        var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+        var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+        document.getElementById("sitetime").innerHTML="年龄查询--已运行:"+diffDays+"天"+diffHours+"时"+diffMinutes+"分钟"+diffSeconds+"秒";
+    }
+    siteTime();
+
+</script>
